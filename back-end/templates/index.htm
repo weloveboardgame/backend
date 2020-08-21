@@ -30,7 +30,18 @@
                     var printboard = msg.board;
                     for (i = 0; i < printboard.length; i++) {
                         for (j = 0; j < printboard[i].length; j++) {
-                            $("tr:eq(" + i + ") td:eq(" + j + ")").html(printboard[i][j]);
+                            if (printboard[i][j] == 0) {
+                                $("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
+                            }
+                            else if (printboard[i][j] == 1) {
+                                $("tr:eq(" + i + ") td:eq(" + j + ") img").attr("src", "{{url_for('static', filename='img/blueButton.png')}}");
+                                $("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
+                            }
+                            else if (printboard[i][j] == 2) {
+                                $("tr:eq(" + i + ") td:eq(" + j + ") img").attr("src", "{{url_for('static', filename='img/orangeButton.png')}}");
+                                $("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
+                            }
+                            $("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
                         }
                     }
                 }
@@ -45,17 +56,18 @@
                 return false;
             });
             $('form#send_room').submit(function (event) {
-                var tRows = [];
-                tab = document.getElementById('board');
+                var myTableArray = [];
 
-                for (var r = 0; r < tab.rows.length; r++) {
-                    var tRow = [];
-                    for (var c = 0; c < tab.rows[r].cells.length; c++) {
-                        tRow[c] = tab.rows[r].cells[c].innerHTML;
+                $("#board tr").each(function () {
+                    var arrayOfThisRow = [];
+                    var tableData = $(this).find('p');
+                    if (tableData.length > 0) {
+                        tableData.each(function () { arrayOfThisRow.push($(this).text()); });
+                        myTableArray.push(arrayOfThisRow);
                     }
-                    tRows.push(tRow);
-                }
-                console.log(tRows);
+                });
+
+                console.log(myTableArray);
 
                 socket.emit('my_room_event', { room: $('#join_room').val(), data: $('#room_data').val() });
                 return false;
@@ -70,6 +82,22 @@
     <style>
         #logdata {
             height: 300px;
+        }
+
+        #board img {
+            width: 30px;
+            height: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        #board p {
+            display: none;
+        }
+
+        #board td {
+            width: 50px;
+            height: 50px;
         }
     </style>
 </head>
@@ -103,70 +131,217 @@
             </div>
         </div>
 
-        <div class="text-center">
-            <table id="board" class="w-100">
+        <div class="text-center" align=center>
+            <table id="board" class="w-100" border="1">
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
+                    <td>
+                        <p></p>
+                        <img src="" alt="">
+                    </td>
                 </tr>
             </table>
             <div class="row">
