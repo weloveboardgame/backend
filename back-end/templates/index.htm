@@ -26,7 +26,7 @@
             });
 
             socket.on('my_response', function (msg, cb) {
-                $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+                $('#log').append('<br>' + $('<div/>').text('Received : ' + msg.data).html());
                 if (cb)
                     cb();
             });
@@ -43,7 +43,7 @@
 
             $('form#disconnect').submit(function (event) {
                 socket.emit('disconnect_request');
-                window.location.href = "/close"
+                return false;
             });
         });
     </script>
@@ -57,22 +57,30 @@
 <body>
     <div class="container">
 
-        <div class="form-group">
-            <form id="join" method="POST" action='#' class="row">
-                <input type="text" name="join_room" id="join_room" placeholder="Room Name" class="form-control col m-1">
-                <input type="submit" value="Join Room" class="btn btn-light col m-1">
-            </form>
-        </div>
-        <div class="form-group">
-            <form id="send_room" method="POST" action='#' class="row">
-                <input type="text" name="room_data" id="room_data" placeholder="Message" class="form-control col m-1">
-                <input type="submit" value="Send to Room" class="btn btn-light col m-1">
-            </form>
-        </div>
-        <div class="form-group text-center">
-            <form id="disconnect" method="POST" action="#">
-                <input type="submit" value="Disconnect" class="btn btn-light">
-            </form>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <form id="join" method="POST" action='#' class="row">
+                        <input type="text" name="join_room" id="join_room" placeholder="Room Name"
+                            class="form-control col m-1">
+                        <input type="submit" value="Join Room" class="btn btn-light col m-1">
+                    </form>
+                </div>
+
+                <div class="form-group">
+                    <form id="send_room" method="POST" action='#' class="row">
+                        <input type="text" name="room_data" id="room_data" placeholder="Message"
+                            class="form-control col m-1">
+                        <input type="submit" value="Send" class="btn btn-light col m-1">
+                    </form>
+                </div>
+
+                <div class="form-group text-center m-0">
+                    <form id="disconnect" method="POST" action="#">
+                        <input type="submit" value="Disconnect" class="btn btn-light">
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div id="logdata">
