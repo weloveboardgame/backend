@@ -1,46 +1,98 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-    <head>
-        <title>boardgame</title>
-        <script
-            src="//code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-            crossorigin="anonymous"
-        ></script>
-        <script
-            src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
-            integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I="
-            crossorigin="anonymous"
-        ></script>
-        <script type="text/javascript" charset="utf-8">
-            var socket;
-            $(document).ready(function () {
-                namespace = '/test';
-                var socket = io(namespace);
 
-                socket.on('connect', function () {
-                    socket.emit('my_event', { data: "I'm connected!" });
-                });
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-                $('form#who').submit(function (event) {
-                    socket.emit('who', { data: $('#username').val() });
-                    return false;
-                });
-                $('form#disconnect').submit(function (event) {
-                    socket.emit('disconnect_request');
-                    return false;
-                });
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>Flask-SocketIO Test</title>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+        integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            namespace = '/test';
+
+            var socket = io(namespace);
+
+            socket.on('connect', function () {
+                socket.emit('my_event', { data: 'I\'m connected!' });
             });
-        </script>
-    </head>
-    <body>
-        <form action="#" method="POST" id="who">
-            <input type="text" name="username" id="username" />
-            <button type="submit">go</button>
-        </form>
 
-        <form action="#" method="POST" id="disconnect">
-            <input type="submit" value="Disconnect" />
-        </form>
-    </body>
+            socket.on('my_response', function (msg, cb) {
+                $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+                if (cb)
+                    cb();
+            });
+
+            /* handler */
+            $('form#join').submit(function (event) {
+                socket.emit('join', { room: $('#join_room').val() });
+                return false;
+            });
+            $('form#send_room').submit(function (event) {
+                socket.emit('my_room_event', { room: $('#join_room').val(), data: $('#room_data').val() });
+                return false;
+            });
+
+            $('form#disconnect').submit(function (event) {
+                socket.emit('disconnect_request');
+                window.location.href = "/close"
+            });
+        });
+    </script>
+    <style>
+        #logdata {
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="form-group">
+            <form id="join" method="POST" action='#' class="row">
+                <input type="text" name="join_room" id="join_room" placeholder="Room Name" class="form-control col m-1">
+                <input type="submit" value="Join Room" class="btn btn-light col m-1">
+            </form>
+        </div>
+        <div class="form-group">
+            <form id="send_room" method="POST" action='#' class="row">
+                <input type="text" name="room_data" id="room_data" placeholder="Message" class="form-control col m-1">
+                <input type="submit" value="Send to Room" class="btn btn-light col m-1">
+            </form>
+        </div>
+        <div class="form-group text-center">
+            <form id="disconnect" method="POST" action="#">
+                <input type="submit" value="Disconnect" class="btn btn-light">
+            </form>
+        </div>
+
+        <div id="logdata">
+            <h5>Receive:</h5>
+            <div id="log"></div>
+        </div>
+
+    </div class="container">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+
 </html>
