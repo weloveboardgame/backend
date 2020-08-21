@@ -45,6 +45,18 @@
                 return false;
             });
             $('form#send_room').submit(function (event) {
+                var tRows = [];
+                tab = document.getElementById('board');
+
+                for (var r = 0; r < tab.rows.length; r++) {
+                    var tRow = [];
+                    for (var c = 0; c < tab.rows[r].cells.length; c++) {
+                        tRow[c] = tab.rows[r].cells[c].innerHTML;
+                    }
+                    tRows.push(tRow);
+                }
+                console.log(tRows);
+
                 socket.emit('my_room_event', { room: $('#join_room').val(), data: $('#room_data').val() });
                 return false;
             });
@@ -92,7 +104,7 @@
         </div>
 
         <div class="text-center">
-            <table id="board">
+            <table id="board" class="w-100">
                 <tr>
                     <td></td>
                     <td></td>
@@ -157,6 +169,15 @@
                     <td></td>
                 </tr>
             </table>
+            <div class="row">
+                <button class="col btn btn-light">1</button>
+                <button class="col btn btn-light">2</button>
+                <button class="col btn btn-light">3</button>
+                <button class="col btn btn-light">4</button>
+                <button class="col btn btn-light">5</button>
+                <button class="col btn btn-light">6</button>
+                <button class="col btn btn-light">7</button>
+            </div>
         </div>
 
         <div id="logdata">

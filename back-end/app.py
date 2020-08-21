@@ -43,7 +43,8 @@ def join(message):
 
 @socketio.on('my_room_event', namespace='/test')
 def send_room_message(message):
-    emit('my_response', {'data': message['data']}, room=message['room'])
+    print(message)
+    #emit('my_response', {'data': message['data']}, room=message['room'])
 
 @socketio.on('disconnect_request', namespace='/test')
 def disconnect_request():
