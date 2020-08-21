@@ -69,7 +69,7 @@
 
                 console.log(myTableArray);
 
-                socket.emit('my_room_event', { room: $('#join_room').val(), data: $('#room_data').val() });
+                socket.emit('my_room_event', { room: $('#join_room').val(), data: myTableArray });
                 return false;
             });
 
@@ -344,7 +344,7 @@
                     </td>
                 </tr>
             </table>
-            <div class="row">
+            <div class="row pr-2 pl-2">
                 <button class="col btn btn-light">1</button>
                 <button class="col btn btn-light">2</button>
                 <button class="col btn btn-light">3</button>
