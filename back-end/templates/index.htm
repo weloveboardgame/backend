@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>boardgame</title>
+        <script
+            src="//code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+            integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I="
+            crossorigin="anonymous"
+        ></script>
+        <script type="text/javascript" charset="utf-8">
+            var socket;
+            $(document).ready(function () {
+                namespace = '/test';
+                var socket = io(namespace);
+
+                socket.on('connect', function () {
+                    socket.emit('my_event', { data: "I'm connected!" });
+                });
+
+                $('form#who').submit(function (event) {
+                    socket.emit('who', { data: $('#username').val() });
+                    return false;
+                });
+                $('form#disconnect').submit(function (event) {
+                    socket.emit('disconnect_request');
+                    return false;
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <form action="#" method="POST" id="who">
+            <input type="text" name="username" id="username" />
+            <button type="submit">go</button>
+        </form>
+
+        <form action="#" method="POST" id="disconnect">
+            <input type="submit" value="Disconnect" />
+        </form>
+    </body>
+</html>

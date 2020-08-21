@@ -1,41 +1,44 @@
-from flask import Flask, jsonify
-from flask_restful import Resource, Api
-#from OpenSSL import SSL
-import os
+from flask import Flask, render_template, session
+from flask_socketio import SocketIO, emit, join_room, rooms
 
 app = Flask(__name__)
-api = Api(app)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
 
-app.secret_key = os.urandom(24)
+full = 0
 
-@app.route("/")
+@app.before_request
+def before_request():
+    global full
+    print(full)
+    if full == 2: return "X"
+    elif full == 0: full += 1
+    elif full == 1: full += 1
+    else: full = 1
+    
+@app.route('/')
 def index():
-    return "보드게임좋아"
+    return render_template('index.htm')
 
-class game(Resource):
-    def get(self):
-        return jsonify({"method":"get", "room":"1", "player":"user1", "board":"010010101010100"})
+@socketio.on('connect', namespace='/test')
+def connect():
+    
+    print("connected!!")
+    emit('my_response', {'data': 'Connected'})
 
-api.add_resource(game, "/game")
+@socketio.on("who", namespace="/test")
+def who(data):
+    if len(str(data).strip()) == 0:
+        return "X"
+    else:
+        print(data["data"])
 
-# 로직 계산, 동기화 부분!important, 
+@socketio.on('disconnect_request', namespace='/mynamespace') 
+def disconnect(): 
+    global full
+    print(full)
+    full -= 1
+    return "disconnected.." 
 
-if __name__ == "__main__":
-    app.run(host="108.61.127.229", port=80)
-
-
-
-# getMapStatus()
-# setStone()
-# getGameStatus()
-
-'''
-req ->
-
-
-res ->
-- board 정보 [[]]		
-- 플레이어 1 or 2	
-- 턴 수
-
-'''
+if __name__ == '__main__':
+    socketio.run(app)
