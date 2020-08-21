@@ -31,6 +31,7 @@
                     for (i = 0; i < printboard.length; i++) {
                         for (j = 0; j < printboard[i].length; j++) {
                             if (printboard[i][j] == 0) {
+                                $("tr:eq(" + i + ") td:eq(" + j + ") img").attr("src", "");
                                 $("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
                             }
                             else if (printboard[i][j] == 1) {
@@ -55,8 +56,9 @@
                 socket.emit('join', { room: $('#join_room').val() });
                 return false;
             });
-            $('form#send_room').submit(function (event) {
+            $('form#send_room').submit(function (event, data) {
                 var myTableArray = [];
+                console.log(data);
 
                 $("#board tr").each(function () {
                     var arrayOfThisRow = [];
@@ -66,8 +68,6 @@
                         myTableArray.push(arrayOfThisRow);
                     }
                 });
-
-                console.log(myTableArray);
 
                 socket.emit('my_room_event', { room: $('#join_room').val(), data: myTableArray });
                 return false;
