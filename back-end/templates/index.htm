@@ -26,6 +26,7 @@
             });
 
             socket.on('my_response', function (msg, cb) {
+                console.log(msg.board);
                 if (msg.board) {
                     var printboard = msg.board;
                     for (i = 0; i < printboard.length; i++) {
@@ -56,9 +57,8 @@
                 socket.emit('join', { room: $('#join_room').val() });
                 return false;
             });
-            $('form#send_room').submit(function (event, data) {
+            $('form#send_room').submit(function (event) {
                 var myTableArray = [];
-                console.log(data);
 
                 $("#board tr").each(function () {
                     var arrayOfThisRow = [];
@@ -345,13 +345,13 @@
                 </tr>
             </table>
             <div class="row pr-2 pl-2">
-                <button class="col btn btn-light">1</button>
-                <button class="col btn btn-light">2</button>
-                <button class="col btn btn-light">3</button>
-                <button class="col btn btn-light">4</button>
-                <button class="col btn btn-light">5</button>
-                <button class="col btn btn-light">6</button>
-                <button class="col btn btn-light">7</button>
+                <button id="btn1" class="col btn btn-light">1</button>
+                <button id="btn2" class="col btn btn-light">2</button>
+                <button id="btn3" class="col btn btn-light">3</button>
+                <button id="btn4" class="col btn btn-light">4</button>
+                <button id="btn5" class="col btn btn-light">5</button>
+                <button id="btn6" class="col btn btn-light">6</button>
+                <button id="btn7" class="col btn btn-light">7</button>
             </div>
         </div>
 

@@ -23,9 +23,9 @@ def getRandGravity():
     tmp = random.randint(0,3)
     res = ''
     if tmp == 0: res = 'N'
-    if tmp == 1: res = 'S'
-    if tmp == 2: res = 'W'
-    if tmp == 3: res = 'E'
+    elif tmp == 1: res = 'S'
+    elif tmp == 2: res = 'W'
+    elif tmp == 3: res = 'E'
 
     return res
 
@@ -77,7 +77,8 @@ def appplyGravity(board, gravityD):
 @app.before_request
 def before_request():
     if usercount == 2:
-        return "X"
+        pass
+        #return "X"
     
 @app.route('/')
 def index():
@@ -89,7 +90,7 @@ def close():
 
 @socketio.on('my_event', namespace='/test')
 def test_message(message):
-    emit('my_response', {'data': message['data'], 'board': board, 'gravity' : 'W'})
+    emit('my_response', {'data': message['data'], 'board': board})
 
 @socketio.on('join', namespace='/test')
 def join(message):
@@ -99,10 +100,10 @@ def join(message):
 @socketio.on('my_room_event', namespace='/test')
 def send_room_message(message):
     data = message['data']
-    data = appplyGravity(data, "N")
+    data = appplyGravity(data, getRandGravity())
     print(data)
     emit('my_response', {'data': message['data'], 'board': data}, room=message['room'])
-
+    
 @socketio.on('disconnect_request', namespace='/test')
 def disconnect_request():
     @copy_current_request_context
