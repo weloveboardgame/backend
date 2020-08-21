@@ -9,6 +9,16 @@ socketio = SocketIO(app, async_mode=async_mode)
 
 usercount = 0
 
+board = [
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0]
+]
+
 @app.before_request
 def before_request():
     if usercount == 2:
@@ -24,7 +34,7 @@ def close():
 
 @socketio.on('my_event', namespace='/test')
 def test_message(message):
-    emit('my_response', {'data': message['data']})
+    emit('my_response', {'data': message['data'], 'board': board})
 
 @socketio.on('join', namespace='/test')
 def join(message):
@@ -41,7 +51,7 @@ def disconnect_request():
     def can_disconnect():
         disconnect()
     emit('my_response', {'data': 'Disconnected!'}, callback=can_disconnect)
-    
+
 @socketio.on('connect', namespace='/test')
 def test_connect():
     global usercount
@@ -51,7 +61,7 @@ def test_connect():
         usercount += 1
     elif usercount == 2:
         return "X"
-    
+
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
     global usercount

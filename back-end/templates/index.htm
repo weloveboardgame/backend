@@ -26,6 +26,14 @@
             });
 
             socket.on('my_response', function (msg, cb) {
+                if (msg.board) {
+                    var printboard = msg.board;
+                    for (i = 0; i < printboard.length; i++) {
+                        for (j = 0; j < $("#board")[i].length; j++) {
+                            $("tr:eq(" + i + ") td:eq(" + j + ")").html(printboard[i][j]);
+                        }
+                    }
+                }
                 $('#log').append('<br>' + $('<div/>').text('Received : ' + msg.data).html());
                 if (cb)
                     cb();
@@ -81,6 +89,74 @@
                     </form>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+            <table id="board">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
         </div>
 
         <div id="logdata">
