@@ -18,7 +18,7 @@ board = [
     [0,0,0,0,0,0,0]
 ]
 
-gravity = ''
+
 
 flag = 1
 
@@ -35,47 +35,56 @@ def getRandGravity():
 
 def appplyGravity(board, gravityD):
     if gravityD == 'W':
-        newBoard = [0 for i in range(7)]
-        tempBoard = [0 for i in range(7)]
-
+        newBoard = [[0 for col in range(7)] for row in range(7)]
         for i in range(0,7):
-            tempBoard = [0 for i in range(7)]
             flag = 0
-            for j in range(0,7):
+            k = 0
+            for j in range(0, 7):
                 if board[i][j] != 0:
-                    tempBoard[flag] = board[i][j]
-                    flag += 1
-            newBoard[i] = tempBoard
+                    flag = j
+                    break
+            for j in range(flag, 7):
+                newBoard[i][k] = board[i][j]
+                k += 1
         return newBoard
     if gravityD == 'E':
-        newBoard = [0 for i in range(7)]
-        tempBoard = [0 for i in range(7)]
+        newBoard = [[0 for col in range(7)] for row in range(7)]
         for i in range(0,7):
-            tempBoard = [0 for i in range(7)]
             flag = 0
-            for j in range(0,7):
+            k = 6
+            for j in range(6, -1, -1):
                 if board[i][j] != 0:
-                    tempBoard[6-flag] = board[i][j]
-                    flag += 1
-            newBoard[i] = tempBoard
+                    flag = j
+                    break
+            for j in range(flag, -1, -1):
+                newBoard[i][k] = board[i][j]
+                k -= 1
         return newBoard
     if gravityD == 'N':
         newBoard = [[0 for col in range(7)] for row in range(7)]
         for i in range(0,7):
             flag = 0
-            for j in range(0,7):
+            k = 0
+            for j in range(0, 7):
                 if board[j][i] != 0:
-                    newBoard[flag][i] = board[j][i]
-                    flag += 1
+                    flag = j
+                    break
+            for j in range(flag, 7):
+                newBoard[k][i] = board[j][i]
+                k += 1
         return newBoard
     if gravityD == 'S':
         newBoard = [[0 for col in range(7)] for row in range(7)]
         for i in range(0,7):
             flag = 0
-            for j in range(0,7):
+            k = 6
+            for j in range(6, -1, -1):
                 if board[j][i] != 0:
-                    newBoard[6-flag][i] = board[j][i]
-                    flag += 1
+                    flag = j
+                    break
+            for j in range(flag, -1, -1):
+                newBoard[k][i] = board[j][i]
+                k -= 1
         return newBoard
 
 def checkGameStatus(board):
@@ -101,6 +110,8 @@ def checkGameStatus(board):
                 flag = board[i][j]
 
     return flag
+
+gravity = getRandGravity()
 
 @app.before_request
 def before_request():

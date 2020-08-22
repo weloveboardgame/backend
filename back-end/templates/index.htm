@@ -54,9 +54,9 @@
                         }
                     }
                 }
-                $('#log').append('<br>' + $('<div/>').text('Received : ' + msg.data).html());
+                $('#log').append('<br>' + $('<div/>').text('Received :' + msg.gravity + " // " + msg.data).html());
                 if (cb)
-                    cb();
+                     cb();
             });
 
             /* handler */
@@ -151,10 +151,10 @@
 
             function cal(num, global_gravity, printboard, flag, socket){
                 num -= 1;
-                console.log(num, global_gravity, printboard, flag, socket)
+                console.log("Before cal:",printboard)
                 switch(global_gravity){
                     case "N":
-                        for(var i = 6; i >= 0; i--){
+                        for(var i = 0; i < 7; i++){
                             if(printboard[i][num] == 0){
                                 printboard[i][num] = flag;
                                 
@@ -173,7 +173,7 @@
                         }
                         break;
                     case "S":
-                        for(var i = 0; i < 7; i++){
+                        for(var i = 6; i >= 0; i--){
                             if(printboard[i][num] == 0){
                                 printboard[i][num] = flag;
                                 document.getElementById(""+i+num).text = flag;
@@ -191,6 +191,7 @@
                         }
                         
                 }
+                console.log("After cal:",printboard)
                 socket.emit('my_room_event', { room: $('#join_room').val(), data: printboard });
             }
        

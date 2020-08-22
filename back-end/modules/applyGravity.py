@@ -9,7 +9,7 @@
 
 
 
-def appplyGravity(board, gravityD):
+def applyGravity(board, gravityD):
     if gravityD == 'W':
         newBoard = [0 for i in range(7)]
         tempBoard = [0 for i in range(7)]
@@ -55,15 +55,18 @@ def appplyGravity(board, gravityD):
         return newBoard
 
 # CODE FOR TESTING
-# board = [
-#     [0,0,0,0,0,0,0],
-#     [0,0,0,0,0,0,0],
-#     [0,0,1,2,0,0,2],
-#     [0,1,0,2,0,0,0],
-#     [0,0,0,0,0,0,1],
-#     [0,0,0,0,0,0,0],
-#     [0,0,0,0,0,0,0]
-# ]
+board = [
+     [0,0,0,0,0,0,0],
+     [0,0,0,0,0,0,0],
+     [0,0,0,0,0,0,0],
+     [0,0,0,0,0,0,0],
+     [0,0,0,0,0,0,0],
+     [0,0,0,0,0,0,0],
+     [0,0,0,0,0,0,0]
+]
 
-# for i in range(7):
-#     print(appplyGravity(board, 'S')[i])
+ for i in range(7):
+     print(applyGravity(board, 'S')[i])
+
+li = ["S","S","E","W","N","N"]
+pos = [[1,]]
