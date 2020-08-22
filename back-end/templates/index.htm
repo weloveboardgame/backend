@@ -16,7 +16,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
         integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf-8">
-        global_gravitiy = ''
+        global_gravity = ''
         $(document).ready(function () {
             namespace = '/test';
             
@@ -32,8 +32,8 @@
 
             socket.on('my_response', function (msg, cb) {
                 flag = msg.flag;
-                global_gravitiy = msg.gravitiy;
-
+                global_gravity = msg.gravity;
+                console.log(global_gravity)
                 if (msg.board) {
                     printboard = msg.board;
                     for (i = 0; i < printboard.length; i++) {
@@ -79,7 +79,7 @@
 
                 var copy = myTableArray; // copy <- my Table 
 
-                if (global_gravitiy == "E") {
+                if (global_gravity == "E") {
                     for (i = 6; i >= 0; i--) {
                         if (copy[sel][i] == 1 || copy[sel][i] == 2) {
                             try {
@@ -91,7 +91,7 @@
                             copy[sel][i] = flag; break;
                         }
                     }
-                } else if (global_gravitiy == "W") {
+                } else if (global_gravity == "W") {
                     for (i = 6; i >= 0; i--) {
                         if (copy[sel][i] == 1 || copy[sel][i] == 2) {
                             try {
@@ -103,7 +103,7 @@
                             copy[sel][i] = flag; break;
                         }
                     }
-                } else if (global_gravitiy == "S") {
+                } else if (global_gravity == "S") {
                     for (i = 6; i >= 0; i--) {
                         if (copy[i][sel] == 1 || copy[i][sel] == 2) {
                             try {
@@ -115,7 +115,7 @@
                             copy[i][sel] = flag; break;
                         }
                     }
-                } else if (global_gravitiy == "N") {
+                } else if (global_gravity == "N") {
                     for (i = 6; i >= 0; i--) {
                         if (copy[i][sel] == 1 || copy[i][sel] == 2) {
                             try {
@@ -149,71 +149,71 @@
                 return false;
             });
 
-            function cal(num, global_gravitiy, printboard, flag, socket){
+            function cal(num, global_gravity, printboard, flag, socket){
                 num -= 1;
-                console.log(global_gravitiy, printboard, flag, socket)
-                switch(global_gravitiy){
+                console.log(num, global_gravity, printboard, flag, socket)
+                switch(global_gravity){
                     case "N":
-                        alert("N")
                         for(var i = 6; i >= 0; i--){
-                            if(printboard[i][num] = 0){
+                            if(printboard[i][num] == 0){
                                 printboard[i][num] = flag;
-                                document.getElementById(""+i+num).innerHTML(""+flag)
-                                return true;
+                                
+                                document.getElementById(""+i+num).text = flag;
+                 
                             }
                         }
                         break;
                     case "E":
                         for(var i = 6; i >= 0; i--){
-                            if(printboard[num][i] = 0){
+                            if(printboard[num][i] == 0){
                                 printboard[num][i] = flag;
-                                document.getElementById(""+i+num).innerHTML(""+flag)
-                                return true;
+                                document.getElementById(""+i+num).text = flag;
+                             
                             }
                         }
                         break;
                     case "S":
                         for(var i = 0; i < 7; i++){
-                            if(printboard[i][num] = 0){
+                            if(printboard[i][num] == 0){
                                 printboard[i][num] = flag;
-                                document.getElementById(""+i+num).innerHTML(""+flag)
-                                return true;
+                                document.getElementById(""+i+num).text = flag;
+              
                             }
                         }
                         break;
                     case "W":
                         for(var i = 0; i < 7; i++){
-                            if(printboard[num][i] = 0){
+                            if(printboard[num][i] == 0){
                                 printboard[num][i] = flag;
-                                document.getElementById(""+i+num).innerHTML(""+flag)
-                                return true;
+                                document.getElementById(""+i+num).text = flag;
+                 
                             }
                         }
                         
                 }
                 socket.emit('my_room_event', { room: $('#join_room').val(), data: printboard });
             }
-
+       
             $('button#btn1').click(event =>{
-                cal(1, global_gravitiy, printboard, flag, socket)               
+                cal(1, global_gravity, printboard, flag, socket)               
             })
             $('button#btn2').click(event =>{
-                cal(2,global_gravitiy, printboard, flag, socket)               
+                cal(2,global_gravity, printboard, flag, socket)               
             })
             $('button#btn3').click(event =>{
-                cal(3,global_gravitiy, printboard, flag, socket)               
+                cal(3,global_gravity, printboard, flag, socket)               
             })
             $('button#btn4').click(event =>{
-                cal(4,global_gravitiy, printboard, flag, socket)               
+                cal(4,global_gravity, printboard, flag, socket)               
             })
             $('button#btn5').click(event =>{
-                cal(5,global_gravitiy, printboard, flag, socket)               
+                cal(5,global_gravity, printboard, flag, socket)               
             })
             $('button#btn6').click(event =>{
-                cal(6,global_gravitiy, printboard, flag, socket)               
+                cal(6,global_gravity, printboard, flag, socket)               
             })
             $('button#btn7').click(event =>{
-                cal(7,global_gravitiy, printboard, flag, socket)               
+                cal(7,global_gravity, printboard, flag, socket)               
             })
 
             $('form#disconnect').submit(function (event) {

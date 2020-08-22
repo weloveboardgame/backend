@@ -131,8 +131,8 @@ def send_room_message(message):
     if flag == 1: flag = 2
     else: flag = 1
     data = message['data']
-    gravitiy = getRandGravity()
-    data = appplyGravity(data, gravitiy)
+    gravity = getRandGravity()
+    data = appplyGravity(data, gravity)
     emit('my_response', {'data': message['data'], 'board': data, 'gravity': gravity, 'flag':flag}, room=message['room'])
     
 @socketio.on('disconnect_request', namespace='/test')
