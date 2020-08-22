@@ -16,13 +16,11 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
         integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf-8">
-        var real_gravity = '';
-        var printboard = [[]];
 
         $(document).ready(function () {
             namespace = '/test';
             global_gravitiy = '';
-
+            printboard = [];
             var flag = 0
 
             var socket = io(namespace);
@@ -35,7 +33,7 @@
             socket.on('my_response', function (msg, cb) {
                 flag = msg.flag;
                 global_gravitiy = msg.gravitiy;
-                real_gravity = Object.assign([], global_gravitiy);
+                console.log(global_gravitiy)
                 if (msg.board) {
                     printboard = msg.board;
                     for (i = 0; i < printboard.length; i++) {
@@ -151,9 +149,70 @@
                 return false;
             });
 
+            function cal(num, global_gravitiy, printboard, flag, socket){
+                num -= 1;
+                console.log(global_gravitiy)
+                switch(global_gravitiy){
+                    case "N":
+                        for(var i = 6; i >= 0; i--){
+                            if(printboard[i][num] = 0){
+                                printboard[i][num] = flag;
+                                document.getElementById(""+i+num).innerHTML(""+flag)
+                                return true;
+                            }
+                        }
+                        break;
+                    case "E":
+                        for(var i = 6; i >= 0; i--){
+                            if(printboard[num][i] = 0){
+                                printboard[num][i] = flag;
+                                document.getElementById(""+i+num).innerHTML(""+flag)
+                                return true;
+                            }
+                        }
+                        break;
+                    case "S":
+                        for(var i = 0; i < 7; i++){
+                            if(printboard[i][num] = 0){
+                                printboard[i][num] = flag;
+                                document.getElementById(""+i+num).innerHTML(""+flag)
+                                return true;
+                            }
+                        }
+                        break;
+                    case "W":
+                        for(var i = 0; i < 7; i++){
+                            if(printboard[num][i] = 0){
+                                printboard[num][i] = flag;
+                                document.getElementById(""+i+num).innerHTML(""+flag)
+                                return true;
+                            }
+                        }
+                        
+                }
+                socket.emit('my_room_event', { room: $('#join_room').val(), data: printboard });
+            }
+
             $('button#btn1').click(event =>{
-                var num = this.id
-                alert(num)
+                cal(1,global_gravitiy, printboard, flag, socket)               
+            })
+            $('button#btn2').click(event =>{
+                cal(2,global_gravitiy, printboard, flag, socket)               
+            })
+            $('button#btn3').click(event =>{
+                cal(3,global_gravitiy, printboard, flag, socket)               
+            })
+            $('button#btn4').click(event =>{
+                cal(4,global_gravitiy, printboard, flag, socket)               
+            })
+            $('button#btn5').click(event =>{
+                cal(5,global_gravitiy, printboard, flag, socket)               
+            })
+            $('button#btn6').click(event =>{
+                cal(6,global_gravitiy, printboard, flag, socket)               
+            })
+            $('button#btn7').click(event =>{
+                cal(7,global_gravitiy, printboard, flag, socket)               
             })
 
             $('form#disconnect').submit(function (event) {
@@ -433,13 +492,13 @@
             </table>
             
             <div class="row pr-2 pl-2" id="wrapper">
-                <button id="btn1" class="col btn btn-light">1</button>
-                <button id="btn2" class="col btn btn-light">2</button>
-                <button id="btn3" class="col btn btn-light">3</button>
-                <button id="btn4" class="col btn btn-light">4</button>
-                <button id="btn5" class="col btn btn-light">5</button>
-                <button id="btn6" class="col btn btn-light">6</button>
-                <button id="btn7" class="col btn btn-light">7</button>
+                <button id="btn1" class="col btn btn-light" >1</button>
+                <button id="btn2" class="col btn btn-light" >2</button>
+                <button id="btn3" class="col btn btn-light" >3</button>
+                <button id="btn4" class="col btn btn-light" >4</button>
+                <button id="btn5" class="col btn btn-light" >5</button>
+                <button id="btn6" class="col btn btn-light" >6</button>
+                <button id="btn7" class="col btn btn-light" >7</button>
             </div>
         </div>
 
