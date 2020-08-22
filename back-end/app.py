@@ -18,6 +18,8 @@ board = [
     [0,0,0,0,0,0,0]
 ]
 
+gravity = []
+
 flag = 1
 
 import random
@@ -76,6 +78,30 @@ def appplyGravity(board, gravityD):
                     flag += 1
         return newBoard
 
+def checkGameStatus(board):
+    flag = 0
+    # 가로세로 판정
+    for i in range(7):
+        for j in range(4):
+            if board[i][j] == board[i][j+1] and board[i][j] == board[i][j+2] and board[i][j] == board[i][j+3] and board[i][j] != 0:
+                flag = board[i][j]
+            if board[j][i] == board[j+1][i] and board[j][i] == board[j+2][i] and board[j][i] == board[j+3][i] and board[j][i] != 0:
+                flag = board[i][j]
+
+    # 우 하향 대각선 판정
+    for i in range(4):
+        for j in range(4):
+            if board[i][j] == board[i+1][j+1] and board[i][j] == board[i+2][j+2] and board[i][j] == board[i+3][j+3] and board[i][j] != 0:
+                flag = board[i][j]
+
+    # 좌 하향 대각선 판정
+    for i in range(0,4):
+        for j in range(3,7):
+            if board[i][j] == board[i+1][j-1] and board[i][j] == board[i+2][j-2] and board[i][j] == board[i+3][j-3] and board[i][j] != 0:
+                flag = board[i][j]
+
+    return flag
+
 @app.before_request
 def before_request():
     if usercount == 2:
@@ -92,7 +118,7 @@ def close():
 
 @socketio.on('my_event', namespace='/test')
 def test_message(message):
-    emit('my_response', {'data': message['data'], 'board': board})
+    emit('my_response', {'data': message['data'], 'board': board, 'gravity': gravity})
 
 @socketio.on('join', namespace='/test')
 def join(message):
@@ -123,6 +149,7 @@ def test_connect():
     if usercount == 0 or usercount == 1:
         emit('my_response', {'data': 'Connected', 'count': 0})
         usercount += 1
+       
     elif usercount == 2:
         return "X"
 

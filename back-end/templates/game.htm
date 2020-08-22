@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>Flask-SocketIO Test</title>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+        integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+</head>
+<style>
+    table, th, td {
+      border: 1px solid #bcbcbc;
+    }
+    td {
+      width: 65px;
+      height: 65px;
+    }
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    button {
+        border: 1px solid black !important;
+        width: 25px !important;
+    }
+
+  </style>
+  
+<body>
+    <div class="container">
+        <div class="gravity">
+            <table id="direction" style="border: white">
+                <td style="border: white">현재:</td>
+                <td style="border: white" id="current"></td>
+                <td style="border: white">다음:</td>
+                <td style="border: white" id="next1"></td>
+                <td style="border: white" id="next2"></td>
+                <td style="border: white" id="next3"></td>
+                <td style="border: white" id="next4"></td>
+            </table>
+        </div>
+        <div class="row">
+            <table id="board">
+                <tr>
+                    <td id="00"></td>
+                    <td id="10"></td>
+                    <td id="20"></td>
+                    <td id="30"></td>
+                    <td id="40"></td>
+                    <td id="50"></td>
+                    <td id="60"></td>
+                </tr>
+                <tr>
+                    <td id="01"></td>
+                    <td id="11"></td>
+                    <td id="21"></td>
+                    <td id="31"></td>
+                    <td id="41"></td>
+                    <td id="51"></td>
+                    <td id="61"></td>
+                </tr>
+                <tr>
+                    <td id="02"></td>
+                    <td id="12"></td>
+                    <td id="22"></td>
+                    <td id="32"></td>
+                    <td id="42"></td>
+                    <td id="52"></td>
+                    <td id="62"></td>
+                </tr>
+                <tr>
+                    <td id="03"></td>
+                    <td id="13"></td>
+                    <td id="23"></td>
+                    <td id="33"></td>
+                    <td id="43"></td>
+                    <td id="53"></td>
+                    <td id="63"></td>
+                </tr>
+                <tr>
+                    <td id="04"></td>
+                    <td id="14"></td>
+                    <td id="24"></td>
+                    <td id="34"></td>
+                    <td id="44"></td>
+                    <td id="54"></td>
+                    <td id="64"></td>
+                </tr>
+                <tr>
+                    <td id="05"></td>
+                    <td id="15"></td>
+                    <td id="25"></td>
+                    <td id="35"></td>
+                    <td id="45"></td>
+                    <td id="55"></td>
+                    <td id="65"></td>
+                </tr>
+                <tr>
+                    <td id="06"></td>
+                    <td id="16"></td>
+                    <td id="26"></td>
+                    <td id="36"></td>
+                    <td id="46"></td>
+                    <td id="56"></td>
+                    <td id="66"></td>
+                </tr>
+            </table>
+            
+        </div>
+        <div class="row">
+            <button id="line_1" class="col btn btn-light">1</button>
+            <button id="line_2" class="col btn btn-light">2</button>
+            <button id="line_3" class="col btn btn-light">3</button>
+            <button id="line_4" class="col btn btn-light">4</button>
+            <button id="line_5" class="col btn btn-light">5</button>
+            <button id="line_6" class="col btn btn-light">6</button>
+            <button id="line_7" class="col btn btn-light">7</button>
+        </div>
+
+
+    </div class="container">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+    <script>
+        black = "https://upload.wikimedia.org/wikipedia/ko/thumb/d/d1/Go_b_no_bg.svg/1200px-Go_b_no_bg.svg.png"
+        white = "https://upload.wikimedia.org/wikipedia/ko/thumb/c/c3/Go_w_no_bg.svg/768px-Go_w_no_bg.svg.png"
+        function show(pos, color) { 
+            pos.map((el, idx) => {
+                var img = document.createElement('img'); 
+                img.src = color;
+                x = el[0]
+                y = el[1]
+                document.getElementById("" + x + y).appendChild(img);
+            })
+        }  
+        //list = [[3,2],[2,4]]
+        //show(list, white)
+        down = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAZlBMVEX///8AAAClpaWKiorY2Njc3NzT09Pe3t7S0tLh4eF3d3f29vbo6Ojw8PA9PT2hoaFJSUmtra0RERE2NjYaGhqQkJC2traamppaWlrDw8Nzc3NfX18oKChTU1OOjo67u7suLi5nZ2d5vodPAAAEZ0lEQVR4nO3d61LbQAwF4GxDAhgTcMgFKC3w/i9ZmM4U0njXkla72uPR+dsZoY/jOoZhvItFvdwcus02bB+eh9uKX7VeVj/DVx4vrNfRTxdO8/PGeiPd9LtwlkvrpTRzfe77yNp6Lb3cjgJDmM8NZxMRPlgvppUfEWAIR+vVlBIFhmC9mk6GhPDOejmV3CeEG+vlNHKTAM7jdnqVFD5Zr6eQQ1I4WK+nkNSNJoS99XoKiX8afmZpvZ5CXIgfF+LHhfhxIX5ciB8X4seF+HEhflyIHxfix4X4cSF+XIgfF+LHhfhxIX5ciB8X4seF+HEhflyIHxfix4X4cSF+XIgfF+LHhfhxIX5ciB8X4seF+HEhflyIHxfix4X4cSF+XIgfF+LHhfhxIX5ciB8X4seF+HEhflyIHxfix4X4cSF+XIgfF+KndeF6WHbd/nAtn1BMeH3Yd91yyDqxZvV1OMzLUXouTBnh7fHl34xOep5L/+t0md+yMUWEy9Mpj6LX87+ebfPWS+YUEPZvZ3ME7+c/ju0jOftGX7geG8Q+KeNufKEr/j7qwshhC0zi6LdJRtQWRlfjXWDb6EpsorIwflzGjjMmco0KvlXawmiDgXedJpditqgqTB94Qp9z/kGRQdQUphoMnI+M5/QgHlFROAEMz+RJ8fuMgKgnTF+iH3khj5qaxLrdqAkvpteijuqnRzFa1BJOXaKfoT6ejp9WKCUqCQkNhkB9cI4dVygj6ggpDYZA/gmPNI36f1FFSGqQ8YH4QJtHa1FDSGsw3JOFy+lhdKKCkNgg4wAw4reMRswXUoGc02mJlymJmC0kA+kX6WLxRB1KuN3kCslA3sPko97YTCEdSH8q/Uz64MmTTLWYJ6QDWT8AL4jPNX8z0WKWkA4kP89IZqdbzBGu6EsIfvXNICZbzBAyVhD9bl+pRbmwbIN6RLGwPFDpQpUKawB1WhQK6wBVWpQJawE1WhQJL6sBFVqUCOs1yCSOtigQ1mxQgcgX1m0wn8gW1m4wm8gVWgDziEyhDTDrGZgnZPzUpgrMaZEltGqQSTz92hyhXYNM4kmLDKFlg0zi969PF9o2yCR+a5EstG5QTKQK7RuUEonCNoAiIk3YClByuyEJ2wEKWqQIWwLyWyQI2wKyW5wWtgbktjgpbA/IbHFK2CKQRbwckv+8p/x5Un0gi5j+M8D3RoEsolIqA+sTqwNrEw2AdYkmwJpEI2A94soKWItoCKxDNAXWIBoDyxPNgaWJDQDLEpsAliQ2AixHbAZYitgQsAyxKWAJYmNA1h9QYAK1iQ0CdYlNAjWJjQL1iM0CtYgNA3WITQM1iI0D84nNA3OJAMA8IgQwhwgClBNhgFIiEFBGlL6TzCh8IhiQT4QDcomAQB4REsghggLpRFgglQgMpBGhgRQiOHCaCA+cIs4AmCbOApgizgQYJ84GGCPOCLhY9Lsz30703uWG8/4fkPdGIIisv78e/D3jJe8Npx+6zTZsN92r9P3ukvwBuKlBkWQhU60AAAAASUVORK5CYII="
+        left = "https://cdn.icon-icons.com/icons2/1302/PNG/512/leftarrowsign_85800.png"
+        right = "https://image.flaticon.com/icons/png/512/109/109617.png"
+        top = "https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/arrow_up.png"
+
+        function show_direction(arr){
+            arr.map((el, idx) => {
+                var img = document.createElement('img');
+                switch (arr[idx]){
+                    case 1:
+                        img.src = down;
+                        break;
+                    case 2:
+                        img.src = left;
+                        break;
+                    case 3:
+                        img.src = right;
+                        break;
+                    case 4:
+                        img.src = top;
+                        break;
+                }
+                var table;
+                if(idx == 0)
+                    table = document.getElementById("current").appendChild(img);
+                else
+                    table = document.getElementById(`next${idx}`).appendChild(img);
+            })
+         
+        }
+
+        arr = [1,1,3,4,2]
+        show_direction(arr)
+    </script>
+</body>
+
+</html>
