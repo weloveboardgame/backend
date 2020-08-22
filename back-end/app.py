@@ -129,7 +129,7 @@ def join(message):
 def send_room_message(message):
     global flag
     if flag == 1: flag = 2
-    else: flag = 1
+    else: flag = 1   
     data = message['data']
     gravity = getRandGravity()
     data = appplyGravity(data, gravity)
