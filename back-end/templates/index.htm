@@ -16,10 +16,10 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
         integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf-8">
-
+        global_gravitiy = ''
         $(document).ready(function () {
             namespace = '/test';
-            global_gravitiy = '';
+            
             printboard = [];
             var flag = 0
 
@@ -33,7 +33,7 @@
             socket.on('my_response', function (msg, cb) {
                 flag = msg.flag;
                 global_gravitiy = msg.gravitiy;
-                console.log(global_gravitiy)
+
                 if (msg.board) {
                     printboard = msg.board;
                     for (i = 0; i < printboard.length; i++) {
@@ -151,9 +151,9 @@
 
             function cal(num, global_gravitiy, printboard, flag, socket){
                 num -= 1;
-                console.log(global_gravitiy)
                 switch(global_gravitiy){
                     case "N":
+                        alert("N")
                         for(var i = 6; i >= 0; i--){
                             if(printboard[i][num] = 0){
                                 printboard[i][num] = flag;
@@ -194,7 +194,7 @@
             }
 
             $('button#btn1').click(event =>{
-                cal(1,global_gravitiy, printboard, flag, socket)               
+                cal(1, global_gravitiy, printboard, flag, socket)               
             })
             $('button#btn2').click(event =>{
                 cal(2,global_gravitiy, printboard, flag, socket)               
