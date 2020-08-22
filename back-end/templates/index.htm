@@ -18,15 +18,20 @@
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
             namespace = '/test';
+            global_gravitiy = ''
+
+            var flag = 0
 
             var socket = io(namespace);
+
 
             socket.on('connect', function () {
                 socket.emit('my_event', { data: 'I\'m connected!' });
             });
 
             socket.on('my_response', function (msg, cb) {
-                console.log(msg.board);
+                flag = msg.flag;
+                global_gravitiy = msg.gravitiy;
                 if (msg.board) {
                     var printboard = msg.board;
                     for (i = 0; i < printboard.length; i++) {
@@ -43,7 +48,7 @@
                                 $("tr:eq(" + i + ") td:eq(" + j + ") img").attr("src", "{{url_for('static', filename='img/orangeButton.png')}}");
                                 $("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
                             }
-                            $("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
+                            //$("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
                         }
                     }
                 }
@@ -59,7 +64,6 @@
             });
             $('form#send_room').submit(function (event) {
                 var myTableArray = [];
-
                 $("#board tr").each(function () {
                     var arrayOfThisRow = [];
                     var tableData = $(this).find('p');
@@ -69,7 +73,77 @@
                     }
                 });
 
-                socket.emit('my_room_event', { room: $('#join_room').val(), data: myTableArray });
+                var sel = $("#room_data").val();
+
+                var copy = myTableArray; // copy <- my Table 
+
+                if (global_gravitiy == "E") {
+                    for (i = 6; i >= 0; i--) {
+                        if (copy[sel][i] == 1 || copy[sel][i] == 2) {
+                            try {
+                                copy[sel][i + 1] = flag;
+                            } catch (error) {
+                                copy[sel][i - 1] = flag;
+                            }
+                        } else {
+                            copy[sel][i] = flag; break;
+                        }
+                    }
+                } else if (global_gravitiy == "W") {
+                    for (i = 6; i >= 0; i--) {
+                        if (copy[sel][i] == 1 || copy[sel][i] == 2) {
+                            try {
+                                copy[sel][i + 1] = flag;
+                            } catch (error) {
+                                copy[sel][i - 1] = flag;
+                            }
+                        } else {
+                            copy[sel][i] = flag; break;
+                        }
+                    }
+                } else if (global_gravitiy == "S") {
+                    for (i = 6; i >= 0; i--) {
+                        if (copy[i][sel] == 1 || copy[i][sel] == 2) {
+                            try {
+                                copy[i + 1][sel] = flag;
+                            } catch (error) {
+                                copy[i - 1][sel] = flag;
+                            }
+                        } else {
+                            copy[i][sel] = flag; break;
+                        }
+                    }
+                } else if (global_gravitiy == "N") {
+                    for (i = 6; i >= 0; i--) {
+                        if (copy[i][sel] == 1 || copy[i][sel] == 2) {
+                            try {
+                                copy[i + 1][sel] = flag;
+                            } catch (error) {
+                                copy[i - 1][sel] = flag;
+                            }
+                        } else {
+                            copy[i][sel] = flag; break;
+                        }
+                    }
+                }
+                for (i = 0; i < copy.length; i++) {
+                    for (j = 0; j < copy[i].length; j++) {
+                        if (copy[i][j] == 0) {
+                            $("tr:eq(" + i + ") td:eq(" + j + ") img").attr("src", "");
+                            $("tr:eq(" + i + ") td:eq(" + j + ") p").html(copy[i][j]);
+                        }
+                        else if (copy[i][j] == 1) {
+                            $("tr:eq(" + i + ") td:eq(" + j + ") img").attr("src", "{{url_for('static', filename='img/blueButton.png')}}");
+                            $("tr:eq(" + i + ") td:eq(" + j + ") p").html(copy[i][j]);
+                        }
+                        else if (copy[i][j] == 2) {
+                            $("tr:eq(" + i + ") td:eq(" + j + ") img").attr("src", "{{url_for('static', filename='img/orangeButton.png')}}");
+                            $("tr:eq(" + i + ") td:eq(" + j + ") p").html(copy[i][j]);
+                        }
+                        //$("tr:eq(" + i + ") td:eq(" + j + ") p").html(printboard[i][j]);
+                    }
+                }
+                socket.emit('my_room_event', { room: $('#join_room').val(), data: copy });
                 return false;
             });
 
@@ -344,6 +418,7 @@
                     </td>
                 </tr>
             </table>
+            <!--
             <div class="row pr-2 pl-2">
                 <button id="btn1" class="col btn btn-light">1</button>
                 <button id="btn2" class="col btn btn-light">2</button>
@@ -352,7 +427,7 @@
                 <button id="btn5" class="col btn btn-light">5</button>
                 <button id="btn6" class="col btn btn-light">6</button>
                 <button id="btn7" class="col btn btn-light">7</button>
-            </div>
+            </div>-->
         </div>
 
         <div id="logdata">

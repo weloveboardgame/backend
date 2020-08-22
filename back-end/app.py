@@ -15,8 +15,10 @@ board = [
     [0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0],
-    [0,0,0,0,0,1,2]
+    [0,0,0,0,0,0,0]
 ]
+
+flag = 1
 
 import random
 def getRandGravity():
@@ -99,10 +101,13 @@ def join(message):
 
 @socketio.on('my_room_event', namespace='/test')
 def send_room_message(message):
+    global flag
+    if flag == 1: flag = 2
+    else: flag = 1
     data = message['data']
-    data = appplyGravity(data, getRandGravity())
-    print(data)
-    emit('my_response', {'data': message['data'], 'board': data}, room=message['room'])
+    gravitiy = getRandGravity()
+    data = appplyGravity(data, gravitiy)
+    emit('my_response', {'data': message['data'], 'board': data, 'gravitiy': gravitiy, 'flag':flag}, room=message['room'])
     
 @socketio.on('disconnect_request', namespace='/test')
 def disconnect_request():
